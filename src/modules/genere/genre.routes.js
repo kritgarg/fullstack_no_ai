@@ -107,6 +107,27 @@ router.post("/create",async (req,res)=>{
     })
 
 
+    router.delete("/delete/:id",async(req,res)=>{
+        const {id}= req.params
+        const numid = Number(id)
+
+                if (!id){
+            return res.status(400).json({"message":"please enter a genre"})
+        }
+        try{
+             await prisma.genre.delete({
+                where:{
+                    id:numid
+                }
+            })
+
+            return res.status(204).json({"message":"delete succesfull"})
+        }catch(err){
+            console.log(err)
+            return 
+        }
+    })
+
 
 
 export default router
