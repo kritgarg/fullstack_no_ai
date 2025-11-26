@@ -53,9 +53,58 @@ router.post("/create",async (req,res)=>{
 
 
 
+    router.get("/:id",async(req,res)=>{
+
+        const {id}= req.params
+        const numid= Number(id)
+        
+        if (!id){
+            return res.status(400).json({"message":"please enter a genre"})
+        }
+
+        
+        try {
+            const findgenre = await prisma.genre.findUnique({
+                where:{
+                    id:numid
+                }
+            })
+
+            if(!findgenre){
+                return res.status(401).json({"message":"genre not found"})
+            }
+
+            return res.status(200).json({findgenre})
+        }catch(err){
+            console.log(err)
+            return
+        }
+    })
 
 
+    router.patch("/update/:id",async(req,res)=>{
+        const {id}= req.params
+        const {name}= req.body
+        const numid = Number(id)
 
+        if (!id){
+            return res.status(400).json({"message":"please enter a genre"})
+        }
+        try{
+            const updated = await prisma.genre.update({
+                where:{
+                    id:numid
+                },
+                data:{
+                    name:name
+                }
+            })
+
+            return res.status(202).json(updated)
+        }catch(err){
+            console.log(err)
+        }
+    })
 
 
 
